@@ -2,7 +2,7 @@
 
 const { ProviderError } = require('../core/router');
 
-const DEFAULT_MODEL = 'gemini-1.5-pro';
+const DEFAULT_MODEL = 'gemini-2.0-flash';
 
 /**
  * Gemini provider adapter. Wraps the official @google/generative-ai

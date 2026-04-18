@@ -10,4 +10,5 @@ yarn-error.log*
 dist/
 .vscode/
 .idea/
+.claude/
 *.log

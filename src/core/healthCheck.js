@@ -5,29 +5,23 @@ const HEALTH_MAX_TOKENS = 5;
 const DEFAULT_TIMEOUT_MS = 10000;
 
 /**
- * Create a promise that rejects after `ms` milliseconds.
- * Used to bound per-provider health check duration.
- * @param {number} ms
- * @returns {Promise<never>}
- */
-function rejectAfter(ms) {
-  return new Promise((_, reject) => {
-    setTimeout(() => reject(new Error(`Health check timed out after ${ms}ms.`)), ms);
-  });
-}
-
-/**
  * Probe a single provider with a minimal prompt. Never throws —
- * any failure is captured into the returned status object.
+ * any failure is captured into the returned status object. The
+ * timeout timer is always cleared so the Node event loop can exit
+ * promptly even when the provider responded quickly.
  * @param {object} provider - Provider instance.
  * @param {number} timeoutMs - Per-provider timeout.
  * @returns {Promise<{ok: boolean, latency: number, error?: string}>}
  */
 async function checkProvider(provider, timeoutMs) {
   const startedAt = Date.now();
+  let timer;
   try {
+    const timeoutPromise = new Promise((_, reject) => {
+      timer = setTimeout(() => reject(new Error(`Health check timed out after ${timeoutMs}ms.`)), timeoutMs);
+    });
     const call = provider.complete({ prompt: HEALTH_PROMPT, maxTokens: HEALTH_MAX_TOKENS });
-    await Promise.race([call, rejectAfter(timeoutMs)]);
+    await Promise.race([call, timeoutPromise]);
     return { ok: true, latency: Date.now() - startedAt };
   } catch (err) {
     return {
@@ -35,6 +29,8 @@ async function checkProvider(provider, timeoutMs) {
       latency: Date.now() - startedAt,
       error: err && err.message ? err.message : String(err)
     };
+  } finally {
+    if (timer) clearTimeout(timer);
   }
 }
 

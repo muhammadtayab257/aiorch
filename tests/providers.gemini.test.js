@@ -26,7 +26,7 @@ describe('GeminiProvider', () => {
     expect(result.text).toBe('Hello from Gemini.');
     expect(result.tokens).toEqual({ input: 7, output: 3 });
     expect(client.getGenerativeModel).toHaveBeenCalledWith(expect.objectContaining({
-      model: 'gemini-1.5-pro',
+      model: 'gemini-2.0-flash',
       generationConfig: { maxOutputTokens: 50, temperature: 0.5 }
     }));
   });

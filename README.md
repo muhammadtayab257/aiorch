@@ -6,7 +6,7 @@ One API. Three providers. Zero lock-in.
 
 ## Features
 
-- **Single interface** for OpenAI (`gpt-4o`), Anthropic (`claude-3-5-sonnet`), and Google Gemini (`gemini-1.5-pro`).
+- **Single interface** for OpenAI (`gpt-4o`), Anthropic (`claude-3-5-sonnet`), and Google Gemini (`gemini-2.0-flash`).
 - **Automatic fallback** — if the preferred provider fails, the next one in your configured order is tried.
 - **Retry with exponential backoff** — configurable, with 1s / 2s / 4s defaults. Only retries on network errors and rate limits; never retries auth errors.
 - **Streaming** — `ai.stream()` delivers text deltas via a callback, with the same fallback and retry semantics (until the first chunk is emitted).
@@ -106,8 +106,13 @@ Costs are computed from token counts using current per-model pricing:
 | Model                                     | Input $/1K tokens | Output $/1K tokens |
 |-------------------------------------------|------------------:|-------------------:|
 | OpenAI `gpt-4o`                           | 0.005             | 0.015              |
+| OpenAI `gpt-4o-mini`                      | 0.00015           | 0.0006             |
 | Anthropic `claude-3-5-sonnet`             | 0.003             | 0.015              |
-| Google `gemini-1.5-pro`                   | 0.00125           | 0.005              |
+| Anthropic `claude-3-haiku`                | 0.00025           | 0.00125            |
+| Google `gemini-2.5-pro`                   | 0.00125           | 0.01               |
+| Google `gemini-2.5-flash`                 | 0.0003            | 0.0025             |
+| Google `gemini-2.0-flash` *(default)*     | 0.0001            | 0.0004             |
+| Google `gemini-2.0-flash-lite`            | 0.000075          | 0.0003             |
 
 Every call returns a `cost` field. The `AISync` instance accumulates totals:
 
