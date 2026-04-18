@@ -1,0 +1,12 @@
+tests/
+examples/
+coverage/
+.env
+.env.*
+.env.example
+.gitignore
+.npmignore
+*.log
+.DS_Store
+.vscode/
+.idea/
