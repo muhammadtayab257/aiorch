@@ -70,6 +70,8 @@ class AISync {
    * @param {number} [config.retries=3] - Max retries per provider.
    * @param {boolean|object} [config.logging=true] - Disable with false, or pass a custom logger with a log(entry) method.
    * @param {{openai?: string, anthropic?: string, gemini?: string}} [config.defaults] - Default models per provider.
+   * @param {number} [config.maxCostPerCall] - Pre-call USD limit; throws CostLimitError when the estimated cost would exceed this.
+   * @param {number} [config.maxCostPerSession] - Session-wide USD limit; throws CostLimitError once the running total reaches this.
    * @param {object} [config._providerFactories] - Test hook to inject provider instances.
    */
   constructor(config) {
@@ -116,9 +118,14 @@ class AISync {
    * resolves with the same standardized response shape as complete()
    * once the stream finishes. Retries and fallback only apply until
    * the first chunk is delivered — after that, errors are terminal.
-   * @param {object} options - Same options as complete().
+   * @param {object} options - Per-call options.
+   * @param {string} options.prompt - The user prompt (required).
+   * @param {'openai'|'anthropic'|'gemini'} [options.provider] - Preferred provider.
+   * @param {string} [options.model] - Model override.
+   * @param {number} [options.maxTokens] - Max output tokens.
+   * @param {number} [options.temperature] - Sampling temperature 0..2.
    * @param {(chunk: string) => void} onChunk - Chunk handler.
-   * @returns {Promise<object>} Final standardized response.
+   * @returns {Promise<{text: string, provider: string, model: string, cost: number, tokens: {input: number, output: number, total: number}, latency: number, raw: object}>}
    */
   async stream(options, onChunk) {
     validateStreamOptions(options, onChunk);

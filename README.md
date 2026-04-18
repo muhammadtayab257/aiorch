@@ -311,12 +311,43 @@ const status = await ai.healthCheck();
 - Each provider has a bounded timeout (default 10s; override with `ai.healthCheck({ timeoutMs: 2000 })`).
 - Uses a small prompt (`"ping"`, `maxTokens: 5`) so probes stay cheap.
 
+## TypeScript
+
+`aisync` ships with generated `.d.ts` type declarations — no separate `@types` package needed. Works out of the box in any TypeScript project:
+
+```ts
+import { AISync, CostLimitError, AllProvidersFailedError } from 'aisync';
+
+const ai = new AISync({
+  openai: process.env.OPENAI_API_KEY,
+  anthropic: process.env.ANTHROPIC_API_KEY,
+  gemini: process.env.GEMINI_API_KEY,
+  fallbackOrder: ['openai', 'anthropic', 'gemini'],
+  maxCostPerSession: 1.0
+});
+
+const res = await ai.complete({
+  prompt: 'Hello',
+  provider: 'openai',   // autocompletes to: 'openai' | 'anthropic' | 'gemini'
+  maxTokens: 200
+});
+
+// Fully typed response
+res.text;      // string
+res.provider;  // string
+res.cost;      // number
+res.tokens;    // { input: number, output: number, total: number }
+```
+
+All public methods (`complete`, `stream`, `healthCheck`, `getCostLimitStatus`, etc.), config options, and error classes are typed. The declarations are built from the JSDoc in source and regenerated automatically via `prepublishOnly`.
+
 ## Development
 
 ```bash
 npm install
 npm test                # run jest
 npm run test:coverage   # run with coverage report
+npm run build:types     # regenerate types/*.d.ts from JSDoc
 npm start               # run examples/basic-usage.js
 ```
 
