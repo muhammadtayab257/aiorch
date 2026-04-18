@@ -1,4 +1,4 @@
-# aisync
+# aiorch
 
 > Unified Node.js interface for OpenAI, Anthropic, and Gemini — with automatic fallback, retry with exponential backoff, cost tracking, and structured logging.
 
@@ -21,7 +21,7 @@ One API. Three providers. Zero lock-in.
 ## Installation
 
 ```bash
-npm install aisync
+npm install aiorch
 ```
 
 You also need at least one provider API key. Export them as environment variables (or pass them directly to the constructor):
@@ -35,9 +35,9 @@ export GEMINI_API_KEY=...
 ## Quick start
 
 ```js
-const { AISync } = require('aisync');
+const { AIOrch } = require('aiorch');
 
-const ai = new AISync({
+const ai = new AIOrch({
   openai: process.env.OPENAI_API_KEY,
   anthropic: process.env.ANTHROPIC_API_KEY,
   gemini: process.env.GEMINI_API_KEY,
@@ -114,7 +114,7 @@ Costs are computed from token counts using current per-model pricing:
 | Google `gemini-2.0-flash` *(default)*     | 0.0001            | 0.0004             |
 | Google `gemini-2.0-flash-lite`            | 0.000075          | 0.0003             |
 
-Every call returns a `cost` field. The `AISync` instance accumulates totals:
+Every call returns a `cost` field. The `AIOrch` instance accumulates totals:
 
 ```js
 await ai.complete({ prompt: 'question 1' });
@@ -135,7 +135,7 @@ Models not in the pricing table return `cost: 0` rather than throwing, so unknow
 - If every provider fails, an `AllProvidersFailedError` is thrown. Its `.failures` property contains `{ provider, error }` entries so you can see exactly what went wrong.
 
 ```js
-const { AllProvidersFailedError } = require('aisync');
+const { AllProvidersFailedError } = require('aiorch');
 
 try {
   await ai.complete({ prompt: 'hi' });
@@ -159,13 +159,13 @@ Logging is on by default and emits structured JSON to stdout. Prompt content is 
 To disable:
 
 ```js
-const ai = new AISync({ openai: '...', logging: false });
+const ai = new AIOrch({ openai: '...', logging: false });
 ```
 
 To use a custom sink (e.g. pino, winston, a file, a shipping service):
 
 ```js
-const ai = new AISync({
+const ai = new AIOrch({
   openai: '...',
   logging: { log: (entry) => myLogger.info(entry) }
 });
@@ -186,28 +186,28 @@ const res = await ai.complete({
 ### OpenAI only
 
 ```js
-const ai = new AISync({ openai: process.env.OPENAI_API_KEY });
+const ai = new AIOrch({ openai: process.env.OPENAI_API_KEY });
 const res = await ai.complete({ prompt: 'Hello!' });
 ```
 
 ### Anthropic only
 
 ```js
-const ai = new AISync({ anthropic: process.env.ANTHROPIC_API_KEY });
+const ai = new AIOrch({ anthropic: process.env.ANTHROPIC_API_KEY });
 const res = await ai.complete({ prompt: 'Hello!' });
 ```
 
 ### Gemini only
 
 ```js
-const ai = new AISync({ gemini: process.env.GEMINI_API_KEY });
+const ai = new AIOrch({ gemini: process.env.GEMINI_API_KEY });
 const res = await ai.complete({ prompt: 'Hello!' });
 ```
 
 ### Override per-provider default model
 
 ```js
-const ai = new AISync({
+const ai = new AIOrch({
   openai: process.env.OPENAI_API_KEY,
   anthropic: process.env.ANTHROPIC_API_KEY,
   defaults: {
@@ -220,7 +220,7 @@ const ai = new AISync({
 ### Custom retries
 
 ```js
-const ai = new AISync({
+const ai = new AIOrch({
   openai: process.env.OPENAI_API_KEY,
   retries: 5
 });
@@ -231,9 +231,9 @@ const ai = new AISync({
 Use `stream()` to receive text deltas as they arrive:
 
 ```js
-const { AISync } = require('aisync');
+const { AIOrch } = require('aiorch');
 
-const ai = new AISync({
+const ai = new AIOrch({
   openai: process.env.OPENAI_API_KEY,
   anthropic: process.env.ANTHROPIC_API_KEY,
   gemini: process.env.GEMINI_API_KEY
@@ -260,9 +260,9 @@ Notes:
 Stop the session from overspending by setting `maxCostPerCall` and/or `maxCostPerSession`:
 
 ```js
-const { AISync, CostLimitError } = require('aisync');
+const { AIOrch, CostLimitError } = require('aiorch');
 
-const ai = new AISync({
+const ai = new AIOrch({
   openai: process.env.OPENAI_API_KEY,
   maxCostPerCall: 0.05,     // $0.05 per call
   maxCostPerSession: 1.00   // $1.00 total across the session
@@ -313,12 +313,12 @@ const status = await ai.healthCheck();
 
 ## TypeScript
 
-`aisync` ships with generated `.d.ts` type declarations — no separate `@types` package needed. Works out of the box in any TypeScript project:
+`aiorch` ships with generated `.d.ts` type declarations — no separate `@types` package needed. Works out of the box in any TypeScript project:
 
 ```ts
-import { AISync, CostLimitError, AllProvidersFailedError } from 'aisync';
+import { AIOrch, CostLimitError, AllProvidersFailedError } from 'aiorch';
 
-const ai = new AISync({
+const ai = new AIOrch({
   openai: process.env.OPENAI_API_KEY,
   anthropic: process.env.ANTHROPIC_API_KEY,
   gemini: process.env.GEMINI_API_KEY,

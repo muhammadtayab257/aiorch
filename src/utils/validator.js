@@ -14,7 +14,7 @@ class ValidationError extends Error {
 }
 
 /**
- * Validate the config passed to the AISync constructor.
+ * Validate the config passed to the AIOrch constructor.
  * At least one provider API key is required.
  * @param {object} config - User-supplied config object.
  * @returns {void}
@@ -22,7 +22,7 @@ class ValidationError extends Error {
  */
 function validateConfig(config) {
   if (!config || typeof config !== 'object') {
-    throw new ValidationError('AISync config must be an object.');
+    throw new ValidationError('AIOrch config must be an object.');
   }
   const hasAnyKey = SUPPORTED_PROVIDERS.some((p) => typeof config[p] === 'string' && config[p].length > 0);
   if (!hasAnyKey) {

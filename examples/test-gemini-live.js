@@ -8,7 +8,7 @@
  * Run:  GEMINI_API_KEY=... node examples/test-gemini-live.js
  */
 
-const { AISync } = require('..');
+const { AIOrch } = require('..');
 
 async function testComplete(ai) {
   console.log('\n=== 1. complete() ===');
@@ -49,7 +49,7 @@ async function main() {
     console.error('GEMINI_API_KEY env var is required.');
     process.exit(1);
   }
-  const ai = new AISync({
+  const ai = new AIOrch({
     gemini: process.env.GEMINI_API_KEY,
     defaults: { gemini: 'gemini-flash-latest' },
     logging: false

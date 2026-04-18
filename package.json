@@ -1,5 +1,5 @@
 {
-  "name": "aisync",
+  "name": "aiorch",
   "version": "1.0.0",
   "description": "Unified interface for OpenAI, Anthropic, and Gemini APIs with automatic fallback, retry logic, cost tracking, and logging.",
   "main": "src/index.js",
@@ -27,12 +27,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/muhammadtayab257/aisync.git"
+    "url": "git+https://github.com/muhammadtayab257/aiorch.git"
   },
   "bugs": {
-    "url": "https://github.com/muhammadtayab257/aisync/issues"
+    "url": "https://github.com/muhammadtayab257/aiorch/issues"
   },
-  "homepage": "https://github.com/muhammadtayab257/aisync#readme",
+  "homepage": "https://github.com/muhammadtayab257/aiorch#readme",
   "files": [
     "src/",
     "types/",

@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Initial release.
-- Unified `AISync` interface over OpenAI, Anthropic, and Google Gemini.
+- Unified `AIOrch` interface over OpenAI, Anthropic, and Google Gemini.
 - Automatic provider fallback via configurable `fallbackOrder`.
 - Retry with exponential backoff (1s / 2s / 4s) on rate limits, 5xx, and network errors.
 - **Streaming** — `ai.stream(options, onChunk)` delivers text deltas from all three providers through a single callback. Retries apply only before the first chunk; fallback applies only while no chunks have been emitted.

@@ -57,10 +57,10 @@ function buildProviders(config, providerFactories) {
 }
 
 /**
- * AISync — a unified interface over OpenAI, Anthropic, and Gemini
+ * AIOrch — a unified interface over OpenAI, Anthropic, and Gemini
  * with automatic fallback, retry, cost tracking, and logging.
  */
-class AISync {
+class AIOrch {
   /**
    * @param {object} config - Configuration.
    * @param {string} [config.openai] - OpenAI API key.
@@ -213,7 +213,7 @@ class AISync {
 }
 
 module.exports = {
-  AISync,
+  AIOrch,
   OpenAIProvider,
   AnthropicProvider,
   GeminiProvider,

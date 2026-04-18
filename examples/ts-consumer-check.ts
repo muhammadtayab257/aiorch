@@ -2,10 +2,10 @@
 // Confirms that TS consumers get proper types from the generated .d.ts.
 // Run:  npx tsc --noEmit examples/ts-consumer-check.ts
 
-import { AISync, CostLimitError, AllProvidersFailedError } from '../src';
+import { AIOrch, CostLimitError, AllProvidersFailedError } from '../src';
 
 async function demo(): Promise<void> {
-  const ai = new AISync({
+  const ai = new AIOrch({
     openai: process.env.OPENAI_API_KEY,
     anthropic: process.env.ANTHROPIC_API_KEY,
     gemini: process.env.GEMINI_API_KEY,

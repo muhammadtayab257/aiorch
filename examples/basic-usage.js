@@ -3,14 +3,14 @@
 /* eslint-disable no-console */
 
 require('dotenv').config();
-const { AISync } = require('..');
+const { AIOrch } = require('..');
 
 /**
  * Basic usage example. Demonstrates the unified API, automatic
  * fallback, cost tracking, and logging.
  */
 async function main() {
-  const ai = new AISync({
+  const ai = new AIOrch({
     openai: process.env.OPENAI_API_KEY,
     anthropic: process.env.ANTHROPIC_API_KEY,
     gemini: process.env.GEMINI_API_KEY,

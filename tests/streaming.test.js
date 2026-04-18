@@ -3,7 +3,7 @@
 const { OpenAIProvider } = require('../src/providers/openai');
 const { AnthropicProvider } = require('../src/providers/anthropic');
 const { GeminiProvider } = require('../src/providers/gemini');
-const { AISync } = require('../src');
+const { AIOrch } = require('../src');
 
 async function* toAsync(items) {
   for (const item of items) yield item;
@@ -106,7 +106,7 @@ describe('GeminiProvider.stream', () => {
   });
 });
 
-describe('AISync.stream integration', () => {
+describe('AIOrch.stream integration', () => {
   function streamFactory(name, impl) {
     return () => ({
       name,
@@ -117,7 +117,7 @@ describe('AISync.stream integration', () => {
   }
 
   test('delivers chunks and returns standardized response', async () => {
-    const ai = new AISync({
+    const ai = new AIOrch({
       openai: 'sk',
       logging: false,
       _providerFactories: {
@@ -137,7 +137,7 @@ describe('AISync.stream integration', () => {
   });
 
   test('falls back when no chunks have been emitted', async () => {
-    const ai = new AISync({
+    const ai = new AIOrch({
       openai: 'sk',
       anthropic: 'sk',
       fallbackOrder: ['openai', 'anthropic'],
@@ -160,7 +160,7 @@ describe('AISync.stream integration', () => {
   });
 
   test('does NOT fall back once chunks have been emitted', async () => {
-    const ai = new AISync({
+    const ai = new AIOrch({
       openai: 'sk',
       anthropic: 'sk',
       fallbackOrder: ['openai', 'anthropic'],
@@ -181,7 +181,7 @@ describe('AISync.stream integration', () => {
 
   test('retries before first chunk is emitted', async () => {
     let attempts = 0;
-    const ai = new AISync({
+    const ai = new AIOrch({
       openai: 'sk',
       logging: false,
       retries: 2,
@@ -203,7 +203,7 @@ describe('AISync.stream integration', () => {
   });
 
   test('validates onChunk is a function', async () => {
-    const ai = new AISync({ openai: 'sk', logging: false });
+    const ai = new AIOrch({ openai: 'sk', logging: false });
     await expect(ai.stream({ prompt: 'hi' })).rejects.toThrow(/chunk callback/);
   });
 });

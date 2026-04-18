@@ -1,6 +1,6 @@
 'use strict';
 
-const { AISync, ValidationError, AllProvidersFailedError, CostLimitError } = require('../src');
+const { AIOrch, ValidationError, AllProvidersFailedError, CostLimitError } = require('../src');
 
 function fakeFactory(name, impl) {
   return () => ({ name, complete: jest.fn().mockImplementation(impl) });
@@ -19,13 +19,13 @@ function buildClient(responses) {
   };
 }
 
-describe('AISync', () => {
+describe('AIOrch', () => {
   test('rejects config without any API keys', () => {
-    expect(() => new AISync({})).toThrow(ValidationError);
+    expect(() => new AIOrch({})).toThrow(ValidationError);
   });
 
   test('performs a successful call and tracks cost', async () => {
-    const ai = new AISync({
+    const ai = new AIOrch({
       openai: 'sk',
       logging: false,
       _providerFactories: {
@@ -47,7 +47,7 @@ describe('AISync', () => {
   });
 
   test('falls back through providers until one succeeds', async () => {
-    const ai = new AISync({
+    const ai = new AIOrch({
       openai: 'sk-o',
       anthropic: 'sk-a',
       gemini: 'sk-g',
@@ -78,7 +78,7 @@ describe('AISync', () => {
   });
 
   test('throws AllProvidersFailedError when every provider fails', async () => {
-    const ai = new AISync({
+    const ai = new AIOrch({
       openai: 'sk',
       anthropic: 'sk',
       fallbackOrder: ['openai', 'anthropic'],
@@ -97,12 +97,12 @@ describe('AISync', () => {
   });
 
   test('validates complete() options', async () => {
-    const ai = new AISync({ openai: 'sk', logging: false });
+    const ai = new AIOrch({ openai: 'sk', logging: false });
     await expect(ai.complete({})).rejects.toBeInstanceOf(ValidationError);
   });
 
   test('resetUsage clears totals', async () => {
-    const ai = new AISync({
+    const ai = new AIOrch({
       openai: 'sk',
       logging: false,
       _providerFactories: {
@@ -119,7 +119,7 @@ describe('AISync', () => {
   });
 
   test('getConfiguredProviders returns only active providers', () => {
-    const ai = new AISync({
+    const ai = new AIOrch({
       openai: 'sk',
       gemini: 'sk',
       logging: false,
@@ -138,7 +138,7 @@ describe('AISync', () => {
   });
 });
 
-describe('AISync cost limits', () => {
+describe('AIOrch cost limits', () => {
   function factoryReturning(name, cost) {
     const tokens = { input: 1000, output: 1000 };
     return () => ({
@@ -149,13 +149,13 @@ describe('AISync cost limits', () => {
   }
 
   test('validates maxCostPerCall and maxCostPerSession types', () => {
-    expect(() => new AISync({ openai: 'sk', maxCostPerCall: 0 })).toThrow(ValidationError);
-    expect(() => new AISync({ openai: 'sk', maxCostPerSession: 'lots' })).toThrow(ValidationError);
-    expect(() => new AISync({ openai: 'sk', maxCostPerCall: 0.05, maxCostPerSession: 1.0 })).not.toThrow();
+    expect(() => new AIOrch({ openai: 'sk', maxCostPerCall: 0 })).toThrow(ValidationError);
+    expect(() => new AIOrch({ openai: 'sk', maxCostPerSession: 'lots' })).toThrow(ValidationError);
+    expect(() => new AIOrch({ openai: 'sk', maxCostPerCall: 0.05, maxCostPerSession: 1.0 })).not.toThrow();
   });
 
   test('throws CostLimitError when session total already exceeds limit', async () => {
-    const ai = new AISync({
+    const ai = new AIOrch({
       openai: 'sk',
       logging: false,
       maxCostPerSession: 0.001,
@@ -167,7 +167,7 @@ describe('AISync cost limits', () => {
   });
 
   test('throws CostLimitError when estimated call cost exceeds limit', async () => {
-    const ai = new AISync({
+    const ai = new AIOrch({
       openai: 'sk',
       logging: false,
       maxCostPerCall: 0.0001,
@@ -179,7 +179,7 @@ describe('AISync cost limits', () => {
   });
 
   test('getCostLimitStatus reflects configured limits', async () => {
-    const ai = new AISync({
+    const ai = new AIOrch({
       openai: 'sk',
       logging: false,
       maxCostPerCall: 0.05,
@@ -193,13 +193,13 @@ describe('AISync cost limits', () => {
   });
 });
 
-describe('AISync healthCheck', () => {
+describe('AIOrch healthCheck', () => {
   function factory(name, impl) {
     return () => ({ name, defaultModel: 'm', complete: jest.fn().mockImplementation(impl) });
   }
 
   test('returns status map for configured providers', async () => {
-    const ai = new AISync({
+    const ai = new AIOrch({
       openai: 'sk',
       anthropic: 'sk',
       logging: false,
@@ -215,7 +215,7 @@ describe('AISync healthCheck', () => {
   });
 
   test('never throws even when all providers fail', async () => {
-    const ai = new AISync({
+    const ai = new AIOrch({
       openai: 'sk',
       logging: false,
       _providerFactories: {
