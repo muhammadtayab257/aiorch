@@ -14,7 +14,7 @@ async function testComplete(ai) {
   console.log('\n=== 1. complete() ===');
   const res = await ai.complete({
     prompt: 'In one sentence, what is TCP?',
-    maxTokens: 80,
+    maxTokens: 800,
     temperature: 0.2
   });
   console.log('Text    :', res.text);
@@ -29,7 +29,7 @@ async function testStream(ai) {
   console.log('\n=== 2. stream() ===');
   process.stdout.write('Streamed text: ');
   const res = await ai.stream(
-    { prompt: 'Count from one to five in words, separated by commas.', maxTokens: 60 },
+    { prompt: 'Count from one to five in words, separated by commas.', maxTokens: 800 },
     (chunk) => process.stdout.write(chunk)
   );
   console.log('\n---');
@@ -51,7 +51,7 @@ async function main() {
   }
   const ai = new AISync({
     gemini: process.env.GEMINI_API_KEY,
-    defaults: { gemini: 'gemini-2.0-flash' },
+    defaults: { gemini: 'gemini-flash-latest' },
     logging: false
   });
   console.log('Configured providers:', ai.getConfiguredProviders().join(', '));

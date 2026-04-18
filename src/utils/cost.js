@@ -18,6 +18,9 @@ const PRICING = {
   'gemini-2.5-flash-lite': { input: 0.0001, output: 0.0004 },
   'gemini-2.0-flash': { input: 0.0001, output: 0.0004 },
   'gemini-2.0-flash-lite': { input: 0.000075, output: 0.0003 },
+  'gemini-flash-latest': { input: 0.0003, output: 0.0025 },
+  'gemini-flash-lite-latest': { input: 0.0001, output: 0.0004 },
+  'gemini-pro-latest': { input: 0.00125, output: 0.01 },
   'gemini-1.5-pro': { input: 0.00125, output: 0.005 },
   'gemini-1.5-flash': { input: 0.000075, output: 0.0003 }
 };
