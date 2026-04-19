@@ -12,4 +12,5 @@ types/
 .vscode/
 .idea/
 .claude/
+TODO.md
 *.log

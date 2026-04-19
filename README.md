@@ -351,6 +351,25 @@ npm run build:types     # regenerate types/*.d.ts from JSDoc
 npm start               # run examples/basic-usage.js
 ```
 
+## Contributing
+
+Contributions are welcome — typo fixes, new providers, bug fixes, feature ideas, and everything in between.
+
+Quick start:
+
+```bash
+git clone https://github.com/muhammadtayab257/aiorch.git
+cd aiorch
+npm install
+npm test
+```
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide: dev setup, PR process, code style, and what we'd love help with (new providers, `timeoutMs` on `complete()`/`stream()`, prompt caching, tool calling, and more).
+
+By participating, you agree to uphold our [Code of Conduct](CODE_OF_CONDUCT.md).
+
+**Found a bug?** [Open an issue](https://github.com/muhammadtayab257/aiorch/issues/new/choose) — there are templates for bug reports and feature requests.
+
 ## License
 
-MIT
+MIT — see [LICENSE](LICENSE). By contributing, you agree your contributions will be licensed under the same terms.
